@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setGreeting(textView: TextView, name: String) {
-        textView.text = "Hello test $name!"
+        textView.text = "Hello $name!"
     }
 
     override fun onDestroyView() {
