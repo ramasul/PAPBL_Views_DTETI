@@ -17,7 +17,12 @@ class SensorFragment : Fragment(), SensorEventListener {
     private var _binding: FragmentSensorBinding? = null
     private val binding get() = _binding!!
     private lateinit var sensorManager: SensorManager
-    private var accelerometer: Sensor? = null
+
+    private var accelerometerReading = FloatArray(3)
+    private var magnetometerReading = FloatArray(3)
+
+    private var rotationMatrix = FloatArray(9)
+    private var orientationAngles = FloatArray(3)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,13 +37,16 @@ class SensorFragment : Fragment(), SensorEventListener {
         super.onViewCreated(view, savedInstanceState)
 
         sensorManager = requireActivity().getSystemService(android.content.Context.SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
     }
 
     override fun onResume() {
         super.onResume()
-        accelerometer?.let {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
+        }
+        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
+            sensorManager.registerListener(this, magneticField, SensorManager.SENSOR_DELAY_UI)
         }
     }
 
@@ -48,11 +56,37 @@ class SensorFragment : Fragment(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-            binding.xValue.text = String.format(Locale.US, "X: %.2f", event.values[0])
-            binding.yValue.text = String.format(Locale.US,"Y: %.2f", event.values[1])
-            binding.zValue.text = String.format(Locale.US,"Z: %.2f", event.values[2])
+        when (event.sensor.type) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                System.arraycopy(event.values, 0, accelerometerReading, 0, event.values.size)
+            }
+            Sensor.TYPE_MAGNETIC_FIELD -> {
+                System.arraycopy(event.values, 0, magnetometerReading, 0, event.values.size)
+            }
         }
+
+        if (SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)) {
+            SensorManager.getOrientation(rotationMatrix, orientationAngles)
+
+            val azimuth = Math.toDegrees(orientationAngles[0].toDouble()).toFloat()  // rotation around Z axis
+            val pitch = Math.toDegrees(orientationAngles[1].toDouble()).toFloat()    // rotation around X axis
+            val roll = Math.toDegrees(orientationAngles[2].toDouble()).toFloat()     // rotation around Y axis
+
+//            Log.d("Orientation", "Azimuth: $azimuth, Pitch: $pitch, Roll: $roll")
+            binding.xValue3.text = String.format(Locale.US, "azimuth: %.2f", azimuth)
+            binding.yValue3.text = String.format(Locale.US,"pitch: %.2f", pitch)
+            binding.zValue3.text = String.format(Locale.US,"roll: %.2f", roll)
+        }
+
+        binding.xValue.text = String.format(Locale.US, "accel X: %.2f", accelerometerReading[0])
+        binding.yValue.text = String.format(Locale.US,"accel Y: %.2f", accelerometerReading[1])
+        binding.zValue.text = String.format(Locale.US,"accel Z: %.2f", accelerometerReading[2])
+
+        binding.xValue2.text = String.format(Locale.US, "magnetX: %.2f", magnetometerReading[0])
+        binding.yValue2.text = String.format(Locale.US,"magnetY: %.2f", magnetometerReading[1])
+        binding.zValue2.text = String.format(Locale.US,"magnetZ: %.2f", magnetometerReading[2])
+
+
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
