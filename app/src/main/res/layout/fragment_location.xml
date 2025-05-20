@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/button_get_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Current Location" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Geocoding"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edit_text_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Enter address" />
+
+        <Button
+            android:id="@+id/button_geocoding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Get Coordinates" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Reverse Geocoding"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edit_text_latitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Enter latitude"
+            android:inputType="numberDecimal|numberSigned" />
+
+        <EditText
+            android:id="@+id/edit_text_longitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Enter longitude"
+            android:inputType="numberDecimal|numberSigned" />
+
+        <Button
+            android:id="@+id/button_reverse_geocoding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Get Address" />
+
+        <TextView
+            android:id="@+id/text_location_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</ScrollView> 

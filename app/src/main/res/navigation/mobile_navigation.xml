@@ -29,4 +29,10 @@
         android:label="Sensor"
         tools:layout="@layout/fragment_sensor" />
 
+    <fragment
+        android:id="@+id/navigation_location"
+        android:name="com.example.viewsdteti.ui.location.LocationFragment"
+        android:label="@string/title_location"
+        tools:layout="@layout/fragment_location" />
+
 </navigation>

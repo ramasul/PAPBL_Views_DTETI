@@ -21,4 +21,9 @@
         android:icon="@drawable/ic_sensor_black_24dp"
         android:title="@string/sensor_menu_title" />
 
+    <item
+        android:id="@+id/navigation_location"
+        android:icon="@drawable/ic_location_black_24dp"
+        android:title="@string/title_location" />
+
 </menu>
